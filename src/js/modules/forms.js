@@ -57,8 +57,9 @@ function forms (){
             if(e.target){
                 e.preventDefault();
             }
-            if (!item.upload.value){
+            if ((item.closest('.popup-design') || item.classList.contains('data-calc')) && !item.upload.value){
                 item.querySelector('[name=upload]').previousElementSibling.style.color = 'red';
+                
             }else{
                 let statusMessage = document.createElement('div');
                 statusMessage.classList.add('status');
