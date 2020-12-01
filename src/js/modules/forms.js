@@ -48,6 +48,7 @@ function forms (){
 
             let name = arr[0].slice(0,6) + dots +arr[1];
             item.previousElementSibling.textContent = name;
+            item.previousElementSibling.style.color = '';
         });
     });
 
@@ -56,54 +57,53 @@ function forms (){
             if(e.target){
                 e.preventDefault();
             }
+            if (!item.upload.value){
+                item.querySelector('[name=upload]').previousElementSibling.style.color = 'red';
+            }else{
+                let statusMessage = document.createElement('div');
+                statusMessage.classList.add('status');
+                item.parentNode.appendChild(statusMessage);
 
-            let statusMessage = document.createElement('div');
-            statusMessage.classList.add('status');
-            item.parentNode.appendChild(statusMessage);
-
-            item.classList.add('animated', 'fadeOutUp');
-            setTimeout(()=>{
-                item.style.display = 'none';
-            },400);
-
-            let statusImg = document.createElement('img');
-                statusImg.setAttribute('src', message.spinner);
-                statusImg.classList.add('animated','fadeInUp');
-                statusMessage.appendChild(statusImg);
-
-            let textStatus = document.createElement('div');
-                textStatus.textContent = message.loading;
-                statusMessage.appendChild(textStatus);
-
-            let formData = new FormData(item);
-
-            let api;
-            item.closest('.popup-design') || item.classList.contains('data-calc') ? api = path.designer : api= path.question;
-            console.log(api);
-            
-            postData(api , formData)
-            .then (res =>{
-                textStatus.textContent = message.success;
-                statusImg.setAttribute('src', message.ok);
-                // console.log(res);
-            })
-            .catch(()=>{
-                textStatus.textContent = message.failure;
-                statusImg.setAttribute('src', message.fail);
-            })
-            .finally(()=>{
-                clearInputs();
+                item.classList.add('animated', 'fadeOutUp');
                 setTimeout(()=>{
-                    statusMessage.remove();
-                    item.style.display = 'block';
-                    item.classList.remove('fadeOutUp');
-                    item.classList.add('fadeInUp');
-                }, 5000);
-            });
-            
+                    item.style.display = 'none';
+                },400);
 
+                let statusImg = document.createElement('img');
+                    statusImg.setAttribute('src', message.spinner);
+                    statusImg.classList.add('animated','fadeInUp');
+                    statusMessage.appendChild(statusImg);
 
+                let textStatus = document.createElement('div');
+                    textStatus.textContent = message.loading;
+                    statusMessage.appendChild(textStatus);
 
+                let formData = new FormData(item);
+
+                let api;
+                item.closest('.popup-design') || item.classList.contains('data-calc') ? api = path.designer : api= path.question;
+                
+                postData(api , formData)
+                .then (res =>{
+                    textStatus.textContent = message.success;
+                    statusImg.setAttribute('src', message.ok);
+                    // console.log(res);
+                })
+                .catch(()=>{
+                    textStatus.textContent = message.failure;
+                    statusImg.setAttribute('src', message.fail);
+                })
+                .finally(()=>{
+                    clearInputs();
+                    setTimeout(()=>{
+                        statusMessage.remove();
+                        item.style.display = 'block';
+                        item.classList.remove('fadeOutUp');
+                        item.classList.add('fadeInUp');
+                    }, 5000);
+                });
+            }
+   
         });
     });
 }
