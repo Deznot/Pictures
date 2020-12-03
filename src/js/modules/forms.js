@@ -1,5 +1,5 @@
 import {postData} from "../services/requests";
-function forms (){
+function forms (resSum){
     let forms  = document.querySelectorAll('form'),
         inputs = document.querySelectorAll('input'),
         upload = document.querySelectorAll('input[name = upload]');
@@ -30,6 +30,9 @@ function forms (){
         upload.forEach(item =>{
             item.previousElementSibling.textContent = 'Файл не выбран';
         });
+        for(let key of Object.keys(resSum)){
+            delete resSum[key];
+        }
     };
 
     upload.forEach((item)=>{
@@ -50,7 +53,7 @@ function forms (){
             if(e.target){
                 e.preventDefault();
             }
-            if ((item.closest('.popup-design') || item.classList.contains('data-calc')) && !item.upload.value){
+            if ((item.closest('.popup-design') || item.classList.contains('calc_form')) && !item.upload.value){
                 item.querySelector('[name=upload]').previousElementSibling.style.color = 'red';
                 
             }else{
@@ -72,10 +75,20 @@ function forms (){
                     textStatus.textContent = message.loading;
                     statusMessage.appendChild(textStatus);
 
+
                 let formData = new FormData(item);
+                if (item.classList.contains('calc_form')){
+                    for(let key in resSum){
+                        formData.append(key, resSum[key]);
+                    }
+                }
+
+                for(let key of formData){
+                    console.log(key);
+                }
 
                 let api;
-                item.closest('.popup-design') || item.classList.contains('data-calc') ? api = path.designer : api= path.question;
+                item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api= path.question;
                 
                 postData(api , formData)
                 .then (res =>{
