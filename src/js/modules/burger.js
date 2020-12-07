@@ -12,7 +12,7 @@ let burger = (triggerSelector,menuSelector) =>{
         }
     });
 
-    window.addEventListener('resize', (e)=>{
+    window.addEventListener('resize', ()=>{
         if(screen.availWidth > 992){
             menu.style.display = 'none';
         }
