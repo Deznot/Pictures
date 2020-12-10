@@ -83,18 +83,15 @@ function forms (resSum){
                     }
                 }
 
-                for(let key of formData){
-                    console.log(key);
-                }
-
+                
                 let api;
-                item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api= path.question;
+                item.closest('.popup-design') || item.classList.contains('calc_form')  ? 
+                api = path.designer : api= path.question;
                 
                 postData(api , formData)
                 .then (res =>{
                     textStatus.textContent = message.success;
                     statusImg.setAttribute('src', message.ok);
-                    // console.log(res);
                 })
                 .catch(()=>{
                     textStatus.textContent = message.failure;
