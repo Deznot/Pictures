@@ -27,7 +27,9 @@ let modals = () =>{
                 modal.style.display=  "block";
                 document.body.style.marginRight =  `${scroll}px`;
                 document.body.style.overflow = 'hidden';
+                fixAbsolute('.fixed-gift');
             });
+
         });
 
         close.addEventListener('click', ()=>{
@@ -37,6 +39,7 @@ let modals = () =>{
             modal.style.display=  "none";
             document.body.style.overflow = '';
             document.body.style.marginRight =  `0px`;
+            fixAbsolute('.fixed-gift');
         });
         
         modal.addEventListener('click', (e)=>{
@@ -48,6 +51,7 @@ let modals = () =>{
                 modal.style.display=  "none";
                 document.body.style.overflow = '';
                 document.body.style.marginRight =  `0px`;
+                fixAbsolute('.fixed-gift');
             }
         });
     
@@ -64,10 +68,13 @@ let modals = () =>{
                 }
             });
             
-            if (!display){
-                document.querySelector(selector).style.display = 'block';
-                document.body.style.overflow = '';
-            }                
+            if (!display){               
+                document.querySelector(selector).style.display = 'block'; 
+                document.body.style.overflow = 'hidden';
+                fixAbsolute('.fixed-gift');
+                
+            }           
+             
         },time);
     }
     
@@ -97,12 +104,25 @@ let modals = () =>{
         });
     }
 
+    function fixAbsolute(absoluteSelector) {
+        let absolute = document.querySelectorAll(absoluteSelector),
+          scroll = calcScroll();
+          
+        absolute.forEach(item => {
+          let rightS = getComputedStyle(item).right;
+          if (document.body.style.overflow == 'hidden') {
+            item.style.right = `calc(${rightS} + ${scroll}px)`;
+            } else {
+            item.style.right = `calc(${rightS} - ${scroll}px)`;
+            }
+         });
+    }
 
     bindModal('.button-design','.popup-design','.popup-design .popup-close');
     bindModal('.button-consultation','.popup-consultation','.popup-consultation .popup-close');
     bindModal('.fixed-gift','.popup-gift','.popup-gift .popup-close',true);
     openByScroll('.fixed-gift');
-    // showModalByTime('.popup-consultation', 3000);
+    // showModalByTime('.popup-consultation', 60000);
   
     
 };

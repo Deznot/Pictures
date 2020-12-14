@@ -1,5 +1,50 @@
 let drag = () =>{
-    let fileInputs = document.querySelectorAll('[name="upload"]');
+    let fileInputs = document.querySelectorAll('[name="upload"]'),
+        fileUpload = document.querySelectorAll('.file_upload');
+
+    function insertAfter(newNode, referenceNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+
+    function debounce(f, ms) {
+        //задерживает каждый вызов f на ms миллисекунд.
+        let isCooldown = false;
+      
+        return function() {
+          if (isCooldown) {return;}
+
+          f.apply(this, arguments);
+      
+          isCooldown = true;
+      
+          setTimeout(() => isCooldown = false, ms);
+        }; 
+      }
+
+    function dropText(item){
+        let block = document.createElement('div');
+        block.classList.add('animated','fadeIn');
+        block.style.margin = '20px';
+        block.textContent = 'Вы можете перетащить ваши фотографии из файловой системы';
+        insertAfter(block, item);   
+    }
+
+    function delDropText(item){
+        if(item.nextElementSibling.classList.contains('fadeIn')){
+            item.nextElementSibling.classList.remove('fadeIn');
+            item.nextElementSibling.classList.add('fadeOut');
+            item.nextElementSibling.remove();
+        }
+    }
+
+    let wrapDropText = debounce(dropText, 400);
+
+
+    fileUpload.forEach(item=>{
+        item.addEventListener('mouseover', () => wrapDropText(item));
+
+        item.addEventListener('mouseout', () => delDropText(item));
+    });
 
     ['dragenter','dragleave','dragover','drop'].forEach(eventName =>{
         fileInputs.forEach(input=>{
@@ -13,8 +58,8 @@ let drag = () =>{
     }
 
     function highLight(item){
-        item.closest('.file_upload').style.border = "5px solid yellow";
-        item.closest('.file_upload').style.backgroundColor = "rgba(0,0,0, .7)";
+        item.closest('.file_upload').style.border = "5px solid #C51ABB";
+        item.closest('.file_upload').style.backgroundColor = "#949494";
     }
 
     function unhighLight(item){
